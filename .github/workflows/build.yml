@@ -67,7 +67,7 @@ jobs:
       - name: Install gcovr
         run: pip install gcovr
       - name: Install lcov
-        run: pip install lcov
+        run: sudo apt-get -y install lcov
       - name: Test PlatformIO Project
         run: pio test -e $TEST_TARGET
       - name: Generate coverage TXT report
