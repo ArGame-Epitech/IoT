@@ -1,4 +1,5 @@
 #include <unity.h>
+#include <App.h>
 
 void setUp(void) {
   // set stuff up here
@@ -9,7 +10,8 @@ void tearDown(void) {
 }
 
 void test_function_should_doBlahAndBlah(void) {
-  // test stuff
+  App *app = new App();
+  app->setup();
 }
 
 void test_function_should_doAlsoDoBlah(void) {

@@ -69,7 +69,9 @@ jobs:
       - name: Generate coverage report
         uses: threeal/gcovr-action@latest
         with:
-          root: .pio/build/$TEST_TARGET/test
+          excludes: |
+            .pio/*
+            test/*
   anaylse:
     name: SonarCloud Analyse
     needs: [build, test]
