@@ -84,6 +84,8 @@ jobs:
             -Dsonar.c.file.suffixes=-
             -Dsonar.cpp.file.suffixes=-
             -Dsonar.objc.file.suffixes=-
+            -Dsonar.cfamily.llvm-cov.reportPath=.pio/build/$RUN_TARGET/test/**
+            -Dsonar.cfamily.gcov.reportsPath=.pio/build/$RUN_TARGET/test/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
