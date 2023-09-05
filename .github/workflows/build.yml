@@ -64,14 +64,18 @@ jobs:
           python-version: '3.9'
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
+      - name: Install gcovr
+        run: pip install gcovr
       - name: Test PlatformIO Project
         run: pio test -e $TEST_TARGET
       - name: Generate coverage report
-        uses: threeal/gcovr-action@latest
+        run: gcovr -e .pio -e test --sonarqube coverageReport.xml
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
         with:
-          excludes: |
-            .pio/*
-            test/*
+         name: coverageReport.xml
+         path: coverageReport.xml
+
   anaylse:
     name: SonarCloud Analyse
     needs: [build, test]
@@ -79,6 +83,10 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverageReport.xml
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
@@ -90,8 +98,7 @@ jobs:
             -Dsonar.c.file.suffixes=-
             -Dsonar.cpp.file.suffixes=-
             -Dsonar.objc.file.suffixes=-
-            -Dsonar.cfamily.llvm-cov.reportPath=.pio/build/$RUN_TARGET/test/**
-            -Dsonar.cfamily.gcov.reportsPath=.pio/build/$RUN_TARGET/test/**
+            -Dsonar.coverageReportPaths=coverageReport.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
