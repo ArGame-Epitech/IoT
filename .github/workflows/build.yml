@@ -66,15 +66,24 @@ jobs:
         run: pip install --upgrade platformio
       - name: Install gcovr
         run: pip install gcovr
+      - name: Install lcov
+        run: pip install lcov
       - name: Test PlatformIO Project
         run: pio test -e $TEST_TARGET
-      - name: Generate coverage report
-        run: gcovr -e .pio -e test --sonarqube coverageReport.xml
-      - name: Upload coverage report
+      - name: Generate coverage TXT report
+        run: gcovr -e .pio -e test -o coverageReport.txt
+      - name: Generate lcov report
+        run: lcov --directory . -c -o report.info
+      - name: Upload coverage txt report
         uses: actions/upload-artifact@v2
         with:
          name: coverageReport.xml
          path: coverageReport.xml
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: report.info
+          path: report.info
 
   anaylse:
     name: SonarCloud Analyse
@@ -83,10 +92,10 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
-      - name: Download coverage report
+      - name: Download report artifact
         uses: actions/download-artifact@v3
         with:
-          name: coverageReport.xml
+          name: report.info
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
@@ -98,7 +107,7 @@ jobs:
             -Dsonar.c.file.suffixes=-
             -Dsonar.cpp.file.suffixes=-
             -Dsonar.objc.file.suffixes=-
-            -Dsonar.coverageReportPaths=coverageReport.xml
+            -Dsonar.cfamily.llvm-cov.reportPath=report.info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
