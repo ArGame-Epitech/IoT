@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <iostream>
+#include "App.h"
 using namespace std;
 
 void setup() {
