@@ -6,6 +6,6 @@ public:
     App();
     ~App();
     void run();
-}
+};
 
 #endif //ARGAMES_IOT
