@@ -48,6 +48,7 @@ jobs:
       RUN_TARGET: ${{ vars.PIO_RUN_TARGET_ENV }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
@@ -67,7 +68,7 @@ jobs:
         run: pio test -e $TEST_TARGET
   anaylse:
     name: SonarCloud Analyse
-    needs: build
+    needs: [build, test]
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
