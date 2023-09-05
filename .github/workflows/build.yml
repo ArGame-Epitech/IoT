@@ -66,6 +66,10 @@ jobs:
         run: pip install --upgrade platformio
       - name: Test PlatformIO Project
         run: pio test -e $TEST_TARGET
+      - name: Generate coverage report
+        uses: threeal/gcovr-action@latest
+        with:
+          root: .pio/build/$TEST_TARGET/test
   anaylse:
     name: SonarCloud Analyse
     needs: [build, test]
