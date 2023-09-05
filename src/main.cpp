@@ -1,8 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <iostream>
-using namespace std ;
-
+using namespace std;
 
 void setup() {
   Serial.begin(115200);
