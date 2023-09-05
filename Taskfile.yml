@@ -1,0 +1,11 @@
+version: 3
+tasks:
+  test:
+    desc: "Launch IoT project tests with platformIO"
+    cmds:
+      - pio test -e native
+  check:
+    desc: "Check IoT project with platformIO"
+    cmds:
+      - pio run -e esp32
+      - pio check

@@ -1,11 +1,11 @@
-#ifndef ARGAMES_IOT
-#define ARGAMES_IOT
+#ifndef ARGAMES_IOT_APP
+#define ARGAMES_IOT_APP
 
 class App {
 public:
-    App();
-    ~App();
-    void run();
+    void start();
+    void setup();
+    void loop();
 };
 
-#endif //ARGAMES_IOT
+#endif //ARGAMES_IOT_APP
