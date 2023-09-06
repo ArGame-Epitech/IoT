@@ -1,0 +1,113 @@
+name: Build IoT project with platformIO
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    env:
+      RUN_TARGET: ${{ vars.PIO_RUN_TARGET_ENV }}
+    name: "Build IoT project with platformIO"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+      - name: Build PlatformIO Project
+        run: pio run -e $RUN_TARGET
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: .pio
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: $RUN_TARGET-firmware
+          path: .pio/build/$RUN_TARGET/firmware.bin
+  test:
+    name: "Test IoT project with platformIO"
+    needs: build
+    env:
+      TEST_TARGET: ${{ vars.PIO_TEST_TARGET_ENV }}
+      RUN_TARGET: ${{ vars.PIO_RUN_TARGET_ENV }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+      - name: Install gcovr
+        run: pip install gcovr
+      - name: Install lcov
+        run: sudo apt-get -y install lcov
+      - name: Test PlatformIO Project
+        run: pio test -e $TEST_TARGET
+      - name: Generate coverage TXT report
+        run: gcovr -e .pio -e test -o coverageReport.txt
+      - name: Generate lcov report
+        run: lcov --directory . -c -o report.info
+      - name: Upload coverage txt report
+        uses: actions/upload-artifact@v2
+        with:
+         name: coverageReport.xml
+         path: coverageReport.xml
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: report.info
+          path: report.info
+
+  anaylse:
+    name: SonarCloud Analyse
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+      - name: Download report artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: report.info
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.organization=argame-epitech
+            -Dsonar.projectKey=ArGame-Epitech_IoT
+            -Dsonar.sources=.
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.c.file.suffixes=-
+            -Dsonar.cpp.file.suffixes=-
+            -Dsonar.objc.file.suffixes=-
+            -Dsonar.cfamily.llvm-cov.reportPath=report.info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
