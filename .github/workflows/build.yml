@@ -39,7 +39,7 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
-          name: $RUN_TARGET-firmware
+          name: ${{ vars.PIO_RUN_TARGET_ENV }}-firmware
           path: .pio/build/${{ vars.PIO_RUN_TARGET_ENV }}/firmware.bin
           retention-days: 30
   test:
