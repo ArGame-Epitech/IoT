@@ -31,15 +31,17 @@ jobs:
       - name: Build PlatformIO Project
         run: pio run -e $RUN_TARGET
       - name: Upload build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: .pio
+          retention-days: 1
       - name: Upload binary
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: $RUN_TARGET-firmware
-          path: .pio/build/$RUN_TARGET/firmware.bin
+          path: .pio/build/${{ vars.PIO_RUN_TARGET_ENV }}/firmware.bin
+          retention-days: 30
   test:
     name: "Test IoT project with platformIO"
     needs: build
@@ -75,15 +77,16 @@ jobs:
       - name: Generate lcov report
         run: lcov --directory . -c -o report.info
       - name: Upload coverage txt report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-         name: coverageReport.xml
-         path: coverageReport.xml
+         name: coverageReport.txt
+         path: coverageReport.txt
       - name: Upload coverage report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: report.info
           path: report.info
+          retention-days: 30
 
   anaylse:
     name: SonarCloud Analyse
