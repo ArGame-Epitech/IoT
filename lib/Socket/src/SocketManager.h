@@ -7,8 +7,9 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 #include "Socket.h"
+#include "AuthenticationCharacteristic.h"
 
-namespace socket {    
+namespace socket {  
   
  
     class ISocketManager {
@@ -22,12 +23,12 @@ namespace socket {
        BLESocketManager();
        virtual void setup() override ;
        virtual void loop() override;
+       characteristics::AuthenticationCharacteristic callbacks;
            
     private:
         BLEServer* pBleServer;
         BleSocket* pBleServerSocket;
     };
-
 }
 
 #endif // SOCKET_MANAGER_H

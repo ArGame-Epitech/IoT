@@ -14,6 +14,8 @@
 using namespace state;
 
 class AppManager {
+  
+  public:
     AppManager();
     ~AppManager();
     IStateManager *get_state_manager();
@@ -21,6 +23,7 @@ class AppManager {
     int start();
     int loop();
     socket::ISocketManager *get_socketManager_manager();
+
   private:
     IStateManager *stateManager;
     socket::ISocketManager *socketManager;

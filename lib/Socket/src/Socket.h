@@ -12,8 +12,7 @@ namespace socket {
     class ISocketServer {
     public:
         virtual void onConnect(T* pBleServer) = 0;
-        virtual void onDisconnect(T* pBleServer) = 0;      
-
+        virtual void onDisconnect(T* pBleServer) = 0;
     };
 
     class BleSocket : public ISocketServer<BLEServer>, public BLEServerCallbacks {
