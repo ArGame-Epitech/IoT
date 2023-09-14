@@ -1,14 +1,13 @@
 #include <Arduino.h>
-#include <Wire.h>
-#include <iostream>
 #include "App.h"
-using namespace std;
+
+App* app;
+
 
 void setup() {
-
+    app = new App();
 }
 
 void loop() {
-  // Code à exécuter en boucle (si nécessaire)
-  delay(10);
+    app->loop();
 }
