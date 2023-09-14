@@ -1,4 +1,5 @@
 #include "AppManager.h"
+#include "SocketManager.h"
 #include "State.h"
 
 AppManager::AppManager() {
@@ -11,4 +12,8 @@ AppManager::~AppManager() {
 
 int AppManager::create_states() {
   return OK;
+}
+
+socket::ISocketManager* AppManager::get_socketManager_manager() {
+  return socketManager;
 }

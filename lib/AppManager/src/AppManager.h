@@ -4,6 +4,7 @@
 #include "State.h"
 #include "Interceptor.h"
 #include <BLEServer.h>
+#include "SocketManager.h"
 
 #define ERROR_CREATING_STATE_MANAGER 4001
 #define ERROR_CREATING_STATES 4002
@@ -19,9 +20,11 @@ class AppManager {
     int create_states();
     int start();
     int loop();
+    socket::ISocketManager *get_socketManager_manager();
   private:
     IStateManager *stateManager;
-    //TODO: SocketManager
+    socket::ISocketManager *socketManager;
+  
 };
 
 #endif // APP_MANAGER_H
