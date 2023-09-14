@@ -1,9 +1,30 @@
 version: 3
 tasks:
+  upload_monitor:
+    desc: "Upload and monitor IoT project"
+    cmds:
+      - task: upload
+      - task: monitor
+  monitor:
+    desc: "Launch IoT project monitor with platformIO"
+    cmds:
+      - pio run -e esp32 --target monitor
+  upload:
+    desc: "Upload IoT project"
+    cmds:
+      - pio run -e esp32 --target upload
+  build:
+    desc: "Build IoT project with platformIO"
+    cmds:
+      - pio run -e esp32
   test:
     desc: "Launch IoT project tests with platformIO"
     cmds:
-      - pio test -e native
+      - pio test
+  test_native:
+    desc: "Launch tests without an esp32"
+    cmds:
+      - pio test -e esp32
   check:
     desc: "Check IoT project with platformIO"
     cmds:

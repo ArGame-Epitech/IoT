@@ -4,8 +4,6 @@
 class App {
 public:
     App();
-    void start();
-    void setup();
     void loop();
 };
 
