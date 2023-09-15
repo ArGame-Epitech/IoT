@@ -1,15 +1,15 @@
 #include "Socket.h"
 
-socket::BleSocket::BleSocket() {}
+socket::BleSocketCallbacks::BleSocketCallbacks() {}
 
-void socket::BleSocket::onConnect(BLEServer* pBleServer) {
+void socket::BleSocketCallbacks::onConnect(BLEServer* pServer) {
     Serial.println("Connected");
     pCharacteristic->setValue("Hello!");
     pCharacteristic->notify();
 }
 
-void socket::BleSocket::onDisconnect(BLEServer* pBleServer) {
+void socket::BleSocketCallbacks::onDisconnect(BLEServer* pServer) {
     isAdvertising = false;
     Serial.println("Disconnected");
-    pBleServer->getAdvertising()->stop();
+    pServer->getAdvertising()->stop();
 }

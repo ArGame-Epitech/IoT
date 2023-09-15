@@ -29,6 +29,6 @@ void AuthenticationCharacteristic::onWrite(BLECharacteristic *pCharacteristic)  
 }
 
 void AuthenticationCharacteristic::onRead(BLECharacteristic *pCharacteristic) {
-  // handle read request
+  Serial.println("OnRead Auth CHarateristics");
 }
 }

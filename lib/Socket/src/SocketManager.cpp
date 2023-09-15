@@ -7,15 +7,15 @@ namespace socket {
     BLESocketManager::BLESocketManager() : pBleServer(NULL), pBleServerSocket(NULL) {}
 
     void BLESocketManager::setup() {
-        BLEDevice::init(BleSocket::DEVICE_NAME);
-        pBleServerSocket = new BleSocket();
+        BLEDevice::init(BleSocketCallbacks::DEVICE_NAME);
+        pBleServerSocket = new BleSocketCallbacks();
         pBleServer = BLEDevice::createServer();
         pBleServer->setCallbacks(pBleServerSocket);
 
-        BLEService* pService = pBleServer->createService(BLEUUID(BleSocket::BLE_ID));
+        BLEService* pService = pBleServer->createService(BLEUUID(BleSocketCallbacks::BLE_ID));
         pBleServerSocket->pCharacteristic = pService->createCharacteristic(
             BLEUUID("ca49ea0c-4bd7-11ee-be56-0242ac120001"),
-            BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE //le client peut lire et écrire dans la caractéristique. Possibilités : Notify, Indicate, Broadcast, Write, WriteNR, AuthSignedWrite, Read, WriteNoResponse, WriteWithoutResponse, NotifyEncryptionRequired, IndicateEncryptionRequired, NotifyAuthenticationRequired, IndicateAuthenticationRequired
+            BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE //le client peut lire et écrire dans la caractéristique. Possibilités : Notify, Indicate, Broadcast, Write, WriteNR, AuthSignedWrite, Read, WriteNoResponse, WriteWithoutResponse, NotifyEncryptionRequired, IndicateEncryptionRequired, NotifyAuthenticationRequired, 
         );
 
         pBleServerSocket->pCharacteristic->addDescriptor(new BLE2902()); //le client peut maintenant écrire dans le descripteur BLE2902 pour activer ou désactiver ces fonctionnalités pour cette caractéristique.
@@ -27,7 +27,7 @@ namespace socket {
             BLECharacteristic::PROPERTY_NOTIFY
             );
           pAuthCharacteristic->setCallbacks(&callbacks); //on associe les callbacks à la caractéristique
-        
+
       
         pService->start();
         pBleServer->getAdvertising()->start();

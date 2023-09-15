@@ -9,6 +9,7 @@
 #include "Socket.h"
 #include "AuthenticationCharacteristic.h"
 
+
 namespace socket {  
   
  
@@ -27,8 +28,10 @@ namespace socket {
            
     private:
         BLEServer* pBleServer;
-        BleSocket* pBleServerSocket;
+        BleSocketCallbacks* pBleServerSocket;
     };
+
+    
 }
 
 #endif // SOCKET_MANAGER_H
