@@ -3,17 +3,28 @@
 
 #include <BLECharacteristic.h>
 #include <Arduino.h>
+#include <BLE2902.h>
 
 namespace characteristics {
 
-class AuthenticationCharacteristic : public BLECharacteristicCallbacks {
+  class AuthenticationCharacteristic : public BLECharacteristic {
+  public:    
+    static constexpr const char* UUID = "07d55126-8fd5-488e-9666-7658fd2059d3";
+    static constexpr const char* AUTH_SHARED_TOKEN = "pass";
+    
+    AuthenticationCharacteristic();
+    ~AuthenticationCharacteristic() = default;
+  };
+
+class AuthenticationCharacteristicCallBacks : public BLECharacteristicCallbacks {
 public:
-  AuthenticationCharacteristic();
-static constexpr const char* UUID = "07d55126-8fd5-488e-9666-7658fd2059d3";
-    static constexpr const char* AUTH_SHARED_TOKEN = "07d";
-    // static constexpr const char* AUTH_SHARED_TOKEN = "07d55126-8fd5-488e-9666-7658fd2059d3";
+  AuthenticationCharacteristicCallBacks();
+
+    
   virtual void onWrite(BLECharacteristic *pCharacteristic);
   virtual void onRead(BLECharacteristic *pCharacteristic);
+
+  
 };
 
 

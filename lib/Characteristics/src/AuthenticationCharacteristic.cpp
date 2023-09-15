@@ -4,9 +4,19 @@
 
 namespace characteristics {
 
-AuthenticationCharacteristic::AuthenticationCharacteristic() {}
 
-void AuthenticationCharacteristic::onWrite(BLECharacteristic *pCharacteristic)  {
+AuthenticationCharacteristic::AuthenticationCharacteristic() : BLECharacteristic(
+    AuthenticationCharacteristic::UUID,
+    BLECharacteristic::PROPERTY_READ | 
+    BLECharacteristic::PROPERTY_WRITE | 
+    BLECharacteristic::PROPERTY_NOTIFY) {
+  this->setCallbacks(new AuthenticationCharacteristicCallBacks());
+  this->addDescriptor(new BLE2902());
+}
+
+AuthenticationCharacteristicCallBacks::AuthenticationCharacteristicCallBacks() {}
+
+void AuthenticationCharacteristicCallBacks::onWrite(BLECharacteristic *pCharacteristic)  {
   
   std::string value = pCharacteristic->getValue();
 
@@ -28,7 +38,7 @@ void AuthenticationCharacteristic::onWrite(BLECharacteristic *pCharacteristic)  
   } 
 }
 
-void AuthenticationCharacteristic::onRead(BLECharacteristic *pCharacteristic) {
+void AuthenticationCharacteristicCallBacks::onRead(BLECharacteristic *pCharacteristic) {
   Serial.println("OnRead Auth CHarateristics");
 }
 }

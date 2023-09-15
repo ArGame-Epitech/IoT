@@ -6,20 +6,20 @@
 
 namespace socket {
 
-
-
     template <typename T>
     class ISocketServer {
     public:
         virtual void onConnect(T* pBleServer) = 0;
-        virtual void onDisconnect(T* pBleServer) = 0;      
-
+        virtual void onDisconnect(T* pBleServer) = 0;
     };
 
     class BleSocketCallbacks : public ISocketServer<BLEServer>, public BLEServerCallbacks {
     public:
         bool isAdvertising = true;
-        BLECharacteristic* pCharacteristic = NULL;
+        // BLECharacteristic* pConnectionCharacteristic = NULL;
+        BLEAdvertising* pAdvertising = NULL;
+        BLECharacteristic* pAuthCharacteristic = NULL;
+
         static constexpr const char* DEVICE_NAME = "SafeCUBE";
         static constexpr const char* BLE_ID = "e94b456b-3786-4f1a-9c2a-a495cc4bc48f";
 
@@ -28,6 +28,7 @@ namespace socket {
 
         void onConnect(BLEServer* pBleServer) override;
         void onDisconnect(BLEServer* pBleServer) override;
+
     };
 
     

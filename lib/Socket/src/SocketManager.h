@@ -24,11 +24,11 @@ namespace socket {
        BLESocketManager();
        virtual void setup() override ;
        virtual void loop() override;
-       characteristics::AuthenticationCharacteristic callbacks;
+    //    characteristics::AuthenticationCharacteristicCallBacks authCallbacks;
            
     private:
         BLEServer* pBleServer;
-        BleSocketCallbacks* pBleServerSocket;
+        BleSocketCallbacks* pBleSocketCallbacks;
     };
 
     

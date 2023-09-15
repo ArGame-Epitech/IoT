@@ -4,8 +4,8 @@ socket::BleSocketCallbacks::BleSocketCallbacks() {}
 
 void socket::BleSocketCallbacks::onConnect(BLEServer* pServer) {
     Serial.println("Connected");
-    pCharacteristic->setValue("Hello!");
-    pCharacteristic->notify();
+    // pConnectionCharacteristic->setValue("Hello!");
+    // pConnectionCharacteristic->notify();
 }
 
 void socket::BleSocketCallbacks::onDisconnect(BLEServer* pServer) {
