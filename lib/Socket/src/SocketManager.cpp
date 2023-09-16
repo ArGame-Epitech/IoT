@@ -1,47 +1,53 @@
 #include "SocketManager.h"
-#include "Socket.h"
 
 
-namespace socket {
+using namespace socket;
+using namespace characteristics;
 
-    BLESocketManager::BLESocketManager() : pBleServer(NULL), pBleSocketCallbacks(NULL) {}
+    BLESocketManager::BLESocketManager() : pMyBleServerCallbacks(new MyBLEServerCallbacks()) {
+      
+    }
 
-    void BLESocketManager::setup() {
-        
-        BLEDevice::init(BleSocketCallbacks::DEVICE_NAME);
-        pBleSocketCallbacks = new BleSocketCallbacks();
+    void BLESocketManager::setup() {  
+           
+        BLEDevice::init(MyBLEConsts::DEVICE_NAME);
         pBleServer = BLEDevice::createServer();
-        pBleServer->setCallbacks(pBleSocketCallbacks);
+        pBleServer->setCallbacks(pMyBleServerCallbacks);
 
-        BLEService* pService = pBleServer->createService(BLEUUID(BleSocketCallbacks::BLE_ID));
+        BLEService* pService = pBleServer->createService(BLEUUID(MyBLEConsts::BLE_ID)); 
 
-        pService->addCharacteristic(new characteristics::AuthenticationCharacteristic());
+        pService->addCharacteristic(new AuthenticationCharacteristic());
       
         pService->start();
-        pBleServer->getAdvertising()->start();
+        pBleServer->startAdvertising();
     }
 
 void BLESocketManager::loop() {
+
+    if(pBleServer->getServiceByUUID(BLEUUID(MyBLEConsts::BLE_ID)) == nullptr) {
+        Serial.println("Restarting BLE");
+        setup();
+    }
+ 
     // Vérifier si on devrait commencer à faire de la publicité
-    if (!pBleSocketCallbacks->isAdvertising) {
-        pBleServer->getAdvertising()->start();
-        pBleSocketCallbacks->isAdvertising = true;
+    if (!pBleServer->getAdvertising()) {
+        pBleServer->startAdvertising();
         Serial.println("Advertising started");
-        digitalWrite(2, LOW);  // Eteindre la LED pour indiquer que la publicité a commencé
+        digitalWrite(2, LOW); 
     }
 
     // Gérer les connexions
     int connectedCount = pBleServer->getConnectedCount();
     if (connectedCount > 0) {
-        // Allumer la LED si au moins un client est connecté
+        
         digitalWrite(2, HIGH);
     } else {
-        // Faire clignoter la LED si aucun client n'est connecté
+        
         digitalWrite(2, LOW);
-        delay(500);  // Attendre 500 ms
+        delay(500);
         digitalWrite(2, HIGH);
-        delay(500);  // Attendre 500 ms
+        delay(500);  
     }
 }
-}
+
 

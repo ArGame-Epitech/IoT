@@ -14,6 +14,6 @@ int AppManager::create_states() {
   return OK;
 }
 
-socket::ISocketManager* AppManager::get_socketManager_manager() {
+ISocketManager* AppManager::get_socketManager_manager() {
   return socketManager;
 }

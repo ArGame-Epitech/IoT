@@ -12,6 +12,7 @@
 #define OK 2000
 
 using namespace state;
+using namespace socket;
 
 class AppManager {
   
@@ -22,11 +23,11 @@ class AppManager {
     int create_states();
     int start();
     int loop();
-    socket::ISocketManager *get_socketManager_manager();
+    ISocketManager *get_socketManager_manager();
 
   private:
     IStateManager *stateManager;
-    socket::ISocketManager *socketManager;
+    ISocketManager *socketManager;
   
 };
 
