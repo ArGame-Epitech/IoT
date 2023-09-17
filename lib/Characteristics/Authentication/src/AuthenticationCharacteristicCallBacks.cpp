@@ -1,15 +1,14 @@
-
-#include "AuthenticationCharacteristicCallBacks.h"
+#include "../include/AuthenticationCharacteristicCallBacks.h"
 
 namespace characteristics {
 
 AuthenticationCharacteristicCallBacks::AuthenticationCharacteristicCallBacks() {}
 
 bool AuthenticationCharacteristicCallBacks::haveToSetCallBack() const {
-  return true;
+  return mustSetCallBack;
 }
 bool AuthenticationCharacteristicCallBacks::haveToSetDescriptor() const {
-  return true;
+  return mustSetDescriptor;
 }
 
 void AuthenticationCharacteristicCallBacks::onWrite(BLECharacteristic *pCharacteristic)  {

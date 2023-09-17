@@ -1,11 +1,10 @@
-#ifndef CHARACTERISTICS_H
-#define CHARACTERISTICS_H
+#ifndef AUTH_CHARACTERISTICS_H
+#define AUTH_CHARACTERISTICS_H
 
 #include <BLECharacteristic.h>
-#include <Arduino.h>
 #include <BLE2902.h>
-#include <ICharacteristic.h>
-#include <AuthenticationCharacteristicCallBacks.h>
+#include "ICharacteristic.h"
+#include "AuthenticationCharacteristicCallBacks.h"
 
 namespace characteristics {
 
@@ -26,8 +25,7 @@ namespace characteristics {
       static constexpr const char* UUID = "07d55126-8fd5-488e-9666-7658fd2059d3";
       static constexpr const char* AUTH_SHARED_TOKEN = "pass";
       static const uint32_t PROPERTIES = BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY;
-  
   };
 
 }
-#endif // CHARACTERISTICS_H
+#endif // AUTH_CHARACTERISTICS_H

@@ -1,7 +1,4 @@
-#include "AuthenticationCharacteristic.h"
-
-
-
+#include "../include/AuthenticationCharacteristic.h"
 namespace characteristics {
 
   BLEUUID  AuthenticationCharacteristic::getUUID()  {
@@ -14,8 +11,16 @@ uint32_t AuthenticationCharacteristic::getProperties()  {
 
 AuthenticationCharacteristic::AuthenticationCharacteristic() : ICharacteristic(getUUID(), getProperties()) {
 
-  this->setCallbacks(new AuthenticationCharacteristicCallBacks());
-  this->addDescriptor(new BLE2902());
+  AuthenticationCharacteristicCallBacks* callBacks = new AuthenticationCharacteristicCallBacks();
+
+  if(callBacks->haveToSetCallBack()){
+
+    this->setCallbacks(callBacks);
+  }
+  if(callBacks->haveToSetDescriptor()) {
+
+    this->addDescriptor(new BLE2902());
+    }
 }
 
 

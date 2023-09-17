@@ -6,9 +6,10 @@
 #include <BLEServer.h>
 #include <BLEAdvertising.h>
 #include <BLEService.h>
-#include <MyBLEServerCallbacks.h>
-#include <MyBLEConsts.h>
-#include <AuthenticationCharacteristic.h>
+#include "MyBLEServerCallbacks.h"
+#include "MyBLEConsts.h"
+#include "../Characteristics/Authentication/include/AuthenticationCharacteristic.h"
+
 
 namespace socket {    
  

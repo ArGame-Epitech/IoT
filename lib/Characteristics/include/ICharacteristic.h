@@ -14,8 +14,9 @@ namespace characteristics {
     virtual BLEUUID getUUID() = 0;
     virtual uint32_t getProperties() = 0;
 
-    ICharacteristic(BLEUUID uuid, uint32_t properties);
-    virtual ~ICharacteristic();
+    ICharacteristic(BLEUUID uuid, uint32_t properties) : BLECharacteristic(uuid, properties) { };
+
+    ~ICharacteristic() = default;
   };
 
 }
