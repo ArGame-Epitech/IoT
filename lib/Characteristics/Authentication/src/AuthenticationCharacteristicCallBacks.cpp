@@ -1,20 +1,16 @@
-#include "AuthenticationCharacteristic.h"
 
-
+#include "AuthenticationCharacteristicCallBacks.h"
 
 namespace characteristics {
 
-
-AuthenticationCharacteristic::AuthenticationCharacteristic() : BLECharacteristic(
-    AuthenticationCharacteristic::UUID,
-    BLECharacteristic::PROPERTY_READ | 
-    BLECharacteristic::PROPERTY_WRITE | 
-    BLECharacteristic::PROPERTY_NOTIFY) {
-  this->setCallbacks(new AuthenticationCharacteristicCallBacks());
-  this->addDescriptor(new BLE2902());
-}
-
 AuthenticationCharacteristicCallBacks::AuthenticationCharacteristicCallBacks() {}
+
+bool AuthenticationCharacteristicCallBacks::haveToSetCallBack() const {
+  return true;
+}
+bool AuthenticationCharacteristicCallBacks::haveToSetDescriptor() const {
+  return true;
+}
 
 void AuthenticationCharacteristicCallBacks::onWrite(BLECharacteristic *pCharacteristic)  {
   
@@ -22,8 +18,8 @@ void AuthenticationCharacteristicCallBacks::onWrite(BLECharacteristic *pCharacte
 
   Serial.print("valueSend = : ");
   Serial.println(value.c_str());
-  
-  if (value == AuthenticationCharacteristic::AUTH_SHARED_TOKEN) {
+  //TODO : traitemnet à faire dans le state
+  if (value == AuthenticationCharacteristic::getSharedToken() ) {
 
     Serial.println("Authentication Complete");
     pCharacteristic->setValue("Authenticated");
@@ -41,4 +37,9 @@ void AuthenticationCharacteristicCallBacks::onWrite(BLECharacteristic *pCharacte
 void AuthenticationCharacteristicCallBacks::onRead(BLECharacteristic *pCharacteristic) {
   Serial.println("OnRead Auth CHarateristics");
 }
+
+void AuthenticationCharacteristicCallBacks::onNotify(BLECharacteristic *pCharacteristic) {
+  Serial.println("OnNotify Auth CHarateristics");
 }
+    
+    } // namespace characteristics

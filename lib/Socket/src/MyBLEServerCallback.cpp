@@ -6,9 +6,7 @@ using namespace socket;
 
 
     void MyBLEServerCallbacks::onConnect( BLEServer* myBLEServer) {
-        Serial.println("Connected");
-        
-
+        Serial.println("Connected");      
     }
 
     void MyBLEServerCallbacks::onDisconnect(BLEServer* myBLEServer) {
