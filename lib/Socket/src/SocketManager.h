@@ -4,12 +4,14 @@
 #include <Arduino.h>
 #include <BLEDevice.h>
 #include <BLEServer.h>
-#include <BLEUtils.h>
-#include <BLE2902.h>
-#include "Socket.h"
+#include <BLEAdvertising.h>
+#include <BLEService.h>
+#include "MyBLEServerCallbacks.h"
+#include "MyBLEConsts.h"
+#include "../Characteristics/Authentication/include/AuthenticationCharacteristic.h"
+
 
 namespace socket {    
-  
  
     class ISocketManager {
     public:
@@ -22,12 +24,10 @@ namespace socket {
        BLESocketManager();
        virtual void setup() override ;
        virtual void loop() override;
-           
-    private:
-        BLEServer* pBleServer;
-        BleSocket* pBleServerSocket;
-    };
-
+       BLEServer* pBleServer;
+       MyBLEServerCallbacks* pMyBleServerCallbacks;
+       BLEService* pService;
+    };    
 }
 
 #endif // SOCKET_MANAGER_H

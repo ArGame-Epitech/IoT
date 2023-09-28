@@ -26,7 +26,15 @@ tasks:
     cmds:
       - pio test -e esp32
   check:
-    desc: "Check IoT project with platformIO"
+    desc: "Check ESP32 environnement of IoT project with platformIO"
     cmds:
       - pio run -e esp32
       - pio check
+  clean_esp:
+    desc: "Clean IoT project with platformIO"
+    cmds:
+      - pio run -e esp32 --target clean
+  clean:
+    desc: "Clean IoT project with platformIO"
+    cmds:
+      - pio run -t clean

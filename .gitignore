@@ -3,3 +3,4 @@
 .env
 .idea
 compile_commands.json
+.vs/

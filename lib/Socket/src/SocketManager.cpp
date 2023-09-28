@@ -1,42 +1,53 @@
 #include "SocketManager.h"
-#include "Socket.h"
 
-namespace socket {
 
-    BLESocketManager::BLESocketManager() : pBleServer(NULL), pBleServerSocket(NULL) {}
+using namespace socket;
+using namespace characteristics;
 
-    void BLESocketManager::setup() {
-        BLEDevice::init(BleSocket::DEVICE_NAME);
-        pBleServerSocket = new BleSocket();
-        pBleServer = BLEDevice::createServer();
-        pBleServer->setCallbacks(pBleServerSocket);
-
-        BLEService* pService = pBleServer->createService(BLEUUID(BleSocket::BLE_ID));
-        pBleServerSocket->pCharacteristic = pService->createCharacteristic(
-            BLEUUID("ca49ea0c-4bd7-11ee-be56-0242ac120001"),
-            BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE
-        );
-
-        pBleServerSocket->pCharacteristic->addDescriptor(new BLE2902());
-        pService->start();
-        pBleServer->getAdvertising()->start();
+    BLESocketManager::BLESocketManager() : pMyBleServerCallbacks(new MyBLEServerCallbacks()) {
+      
     }
 
-    void BLESocketManager::loop() {
-        if (!pBleServerSocket->isAdvertising) {
-            pBleServer->getAdvertising()->start();
-            pBleServerSocket->isAdvertising = true;
-            Serial.println("Advertising");
-        }
+    void BLESocketManager::setup() {  
+           
+        BLEDevice::init(MyBLEConsts::DEVICE_NAME);
+        pBleServer = BLEDevice::createServer();
+        pBleServer->setCallbacks(pMyBleServerCallbacks);
 
-        if (pBleServer->getConnectedCount() > 0) {
-            digitalWrite(2, HIGH);
-            delay(1000);
-        } else {
-            delay(1000);
-            digitalWrite(2, LOW);
-            delay(1000);
-            digitalWrite(2, HIGH);
-        }
+        BLEService* pService = pBleServer->createService(BLEUUID(MyBLEConsts::BLE_ID)); 
+
+        pService->addCharacteristic(new AuthenticationCharacteristic());
+      
+        pService->start();
+        pBleServer->startAdvertising();
+    }
+
+void BLESocketManager::loop() {
+
+    if(pBleServer->getServiceByUUID(BLEUUID(MyBLEConsts::BLE_ID)) == nullptr) {
+        Serial.println("Restarting BLE");
+        setup();
+    }
+ 
+    // Vérifier si on devrait commencer à faire de la publicité
+    if (!pBleServer->getAdvertising()) {
+        pBleServer->startAdvertising();
+        Serial.println("Advertising started");
+        digitalWrite(2, LOW); 
+    }
+
+    // Gérer les connexions
+    int connectedCount = pBleServer->getConnectedCount();
+    if (connectedCount > 0) {
+        
+        digitalWrite(2, HIGH);
+    } else {
+        
+        digitalWrite(2, LOW);
+        delay(500);
+        digitalWrite(2, HIGH);
+        delay(500);  
     }
 }
+
+
